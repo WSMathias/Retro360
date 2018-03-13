@@ -1,0 +1,112 @@
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header">
+              Register to Retro360
+            </div>
+            <div class="card-body">
+              <form novalidate #f="ngForm" (ngSubmit)="onSubmit(f)">
+                  <div class="form-group">
+                      <label for="username">Username</label>
+                      <input 
+                        name="username"
+                        type="text"
+                        required
+                        [(ngModel)]="user.username"
+                        #UserName = "ngModel"
+                        class="form-control">
+                    </div>
+                    <div *ngIf="UserName.errors?.required && UserName.touched" class="alert alert-danger">
+                      Username is required
+                    </div>
+                <div class="form-group">
+                  <label for="firstname">First Name</label>
+                  <input 
+                    name="firstname"
+                    type="text"
+                    required
+                    [(ngModel)]="user.firstname"
+                    #UserFirstName = "ngModel"
+                    class="form-control">
+                </div>
+                <div *ngIf="UserFirstName.errors?.required && UserFirstName.touched" class="alert alert-danger">
+                  First name is required
+                </div>
+                <div class="form-group">
+                    <label for="lastname">Last Name</label>
+                    <input 
+                      name="lastname"
+                      type="text"
+                      required
+                      [(ngModel)]="user.lastname"
+                      #UserLastName = "ngModel"
+                      class="form-control">
+                  </div>
+                  <div *ngIf="UserLastName.errors?.required && UserLastName.touched" class="alert alert-danger">
+                    Last name is required
+                  </div>
+                  <div class="form-group">
+                      <label for="email">Email</label>
+                      <input 
+                        name="email"
+                        type="email"
+                        required
+                        pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                        [(ngModel)]="user.email"
+                        #UserEmail = "ngModel"
+                        class="form-control">
+                    </div>
+                    <div *ngIf="UserEmail.errors?.required && UserEmail.touched" class="alert alert-danger">
+                      Email address is required
+                    </div>
+                    <div *ngIf="UserEmail.errors?.pattern && UserEmail.touched" class="alert alert-danger">
+                      Email address is not valid
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input 
+                          name="phone"
+                          type="text"
+                          pattern="^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$"
+                          [(ngModel)]="user.phone"
+                          #UserPhone = "ngModel"
+                          class="form-control">
+                      </div>
+                    <div *ngIf="UserPhone.errors?.pattern && UserPhone.touched" class="alert alert-danger">
+                      Phone number is not valid
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input 
+                          name="password"
+                          type="password"
+                          required
+                          [(ngModel)]="user.password"
+                          #UserPassword = "ngModel"
+                          class="form-control">
+                      </div>
+                      <div *ngIf="UserPassword.errors?.required && UserPassword.touched" class="alert alert-danger">
+                        Password is required
+                      </div>
+                      <div class="form-group">
+                          <label for="password">confirm Password</label>
+                          <input 
+                            name="cpassword"
+                            type="password"
+                            required
+                            [(ngModel)]="password"
+                            #CPassword = "ngModel"
+                            class="form-control">
+                        </div>
+                        <div *ngIf="CPassword.errors?.required && CPassword.touched" class="alert alert-danger">
+                          Confirm Password is required
+                        </div>
+                        <div *ngIf="CPassword.value !== UserPassword.value && CPassword.touched && UserPassword.touched" class="alert alert-danger">
+                            Password not matching
+                        </div>
+                <input type="submit" value="Register" class="btn btn-primary btn-block">
+              </form>
+            </div>
+          </div>
+    </div>
+  </div>

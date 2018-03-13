@@ -1,0 +1,21 @@
+<div *ngIf="isReadyToLoad; else loading" class="container">
+  <div>
+      <h3>Select Members:</h3>
+  </div>
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+        <form *ngIf="users; else loading" class="list-grup list-unstyle">
+            <div *ngFor="let user of users" class="form-check">
+                <input (change)="onCheckClick(user,$event)" type="checkbox" class="form-check-input">
+                <label class="form-check-label" >{{user.first_name}} {{user.last_name}}</label>
+              </div>
+              <button class="btn btn-success btn-sm" (click)="onSubmitClick()">Update</button>
+        </form>
+    </div>
+  </div>
+</div>
+<ng-template #loading >
+  <h3>Loading Availabe user list.......</h3>
+</ng-template>
+      
+

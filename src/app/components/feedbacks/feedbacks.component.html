@@ -1,0 +1,26 @@
+
+<div *ngIf="isReadyToLoad; else loading">
+  <h4>Feedbacks to: {{receiver.first_name}} {{ receiver.last_name}}</h4>
+  <h4>Board: {{board.board_name}} </h4>
+  <h4>{{feedbacks}}</h4>
+  <ul *ngIf="feedbacks.length; else noFeedbacks" class="list-group list-unstyle">
+    <li class="list-group-item">
+      <div class="card">
+        <div class="card-header">
+          <h5>Feedback From</h5>
+        </div>
+        <div class="card-body">
+          <p>Feeedback text Feeedback text Feeedback text Feeedback text Feeedback text</p>
+        </div>
+      </div>
+    </li>
+  </ul>
+  <ng-template #noFeedbacks>
+    <li class="list-group-item">
+        <h5 class="text-center">No feedbacks</h5>
+    </li>
+  </ng-template>
+</div>
+<ng-template #loading>
+  Loading feeeedbacks ..............
+</ng-template>

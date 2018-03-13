@@ -1,0 +1,59 @@
+<div class="container">
+  <div *ngIf="isReadyToLoad; else loading" >
+    <div class="row">
+      <div class="col-md-8 col-sm-10">
+          <h4>Board Name: {{board.board_name}}</h4>
+      </div>
+      <div class="col-md-4 col-sm-2">
+          <a class="btn btn-secondary btn-sm"><i class="fa fa-pencil"></i></a>
+      </div>
+    </div>
+    <h5>Board Admin: {{ board.admin.first_name }} {{ board.admin.last_name }}</h5>
+    <table class="table">
+      <thead>
+        <th>
+          Board Members
+        </th>
+        <th>
+          <a [routerLink]="['/members/'+board.id]" class="btn btn-success btn-sm pull-right"><i class="fa fa-plus">Member</i></a>
+        </th>
+      </thead>
+      <tbody>
+        <ng-container *ngIf="hasMembers; else noMembers">
+        <tr *ngFor="let member of board.board_members">
+          <td>
+              <i class="fa fa-user"></i>
+              {{ member.first_name }} {{ member.last_name}}
+          </td>
+          <td>
+            <div class="pull-right"  data-toggle="tooltip" data-placement="top" title="View Feedbacks">
+              <a [routerLink]="['feedbacks/'+member.id]" class="btn btn-info btn-sm">
+                <i class="fa fa-comments-o"></i>
+              </a>
+              <a class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Write Feedback">
+                <i class="fa fa-pencil-square-o"></i>
+              </a>
+              <a (click)="onDeleteClick(member.id)" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Remove">
+                <i class="fa fa-remove"></i>
+              </a>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <!-- <app-feedback></app-feedback> -->
+          </td>
+        </tr>
+        </ng-container>
+        <ng-template #noMembers>
+          <tr>
+            <td colspan="2" class="text-center">Board has no members </td>
+          </tr>
+        </ng-template>
+      </tbody>
+    </table>
+    <app-feedback></app-feedback>
+    <app-write-feedback></app-write-feedback>
+  </div>
+</div>
+<ng-template #loading> Loading Board Details.........</ng-template>

@@ -1,0 +1,15 @@
+<div class="row">
+  <div *ngIf="boards; else loading" class="col-md-8">
+    <h2>Available Boards:</h2>
+      <ul class="list-group list-unstyled">
+        <li *ngFor="let board of boards" class="list-group-item">
+          <i class="fa fa-group"></i>
+          {{ board.name }} owned by {{ board.admin.firstname }} {{ board.admin.lastname }}
+          <a  [routerLink]="['board/'+ board.id]" class="btn btn-primary btn-sm pull-right"><i class="fa fa-arrow-circle-right"></i></a>
+        </li>
+      </ul>
+  </div>
+  <ng-template #loading>
+    Loading boards .....
+  </ng-template>
+</div>
