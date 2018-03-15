@@ -9,20 +9,19 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  isLoggedIn: Observable<boolean>;
-  loggedInUser: string;
+  private isLoggedIn: Observable<boolean>;
+  private loggedInUser: string;
   constructor(
     private toastrService: ToastrService,
     private dataService: DataService,
     private authService: AuthService
-  ) {
-    this.isLoggedIn = authService.isLoggedIn();
-    authService.loggedInUser().subscribe((username) => {
-      this.loggedInUser = username;
-    });
-   }
+  ) { }
 
   ngOnInit() {
+    this.isLoggedIn = this.authService.isLoggedIn();
+    this.authService.loggedInUser().subscribe((username) => {
+      this.loggedInUser = username;
+    });
    }
   onLogoutClick() {
     this.authService.logout();

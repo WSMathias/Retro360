@@ -1,0 +1,6 @@
+<h3>List Of users:</h3><button class="btn btn-primary" (click)="onGetUsersClick()">Get List</button>
+<ul class="list-group">
+    <li *ngFor=" let user of users;" class="list-group-item">
+        {{ user.first_name }} {{user.last_name}} {{user.is_staff}}
+    </li>
+</ul>

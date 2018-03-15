@@ -1,10 +1,10 @@
-<nav class="navbar navbar-expand-md navbar-light bg-faded">
+<nav class="navbar navbar-expand-md navbar-dark bg-secondary">
   <a class="navbar-brand" href="#">Retro 360</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarItems" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-    <ul class="navbar-nav mr-auto">
+  <div class="collapse navbar-collapse text-center" id="navbarItems">
+    <ul class="navbar-nav  mr-auto">
       <li *ngIf="(isLoggedIn | async)" class="nav-item active">
         <a class="nav-link" href="#" routerLink="/" >DashBoard</a>
       </li>
@@ -17,10 +17,10 @@
             <a class="nav-link" href="#" routerLink="login" >Login</a>
         </li>
         <li *ngIf="(isLoggedIn | async)" class="nav-item ">
-            <a class="nav-link" [routerLink]= "['profile/'+loggedInUser]" ><i class="fa fa-user"></i>{{ loggedInUser }}</a>
+            <a class="nav-link" [routerLink]= "['profile/'+loggedInUser]" ><i class="fa fa-user"></i> {{ loggedInUser }}</a>
           </li>
          <li *ngIf="(isLoggedIn | async)" class="nav-item ">
-           <a class="nav-link" href="#" (click)="onLogoutClick()">Logout</a>
+           <a class="nav-link" href="#" (click)="onLogoutClick()"><i class="fa fa-sign-out"></i>  Logout</a>
          </li>
       </ul>
   </div>

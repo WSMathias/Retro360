@@ -7,6 +7,8 @@ import { User } from '../models/user';
 import { Router } from '@angular/router';
 import { Token } from '../models/token';
 import 'rxjs/add/operator/map';
+import { ToastrService } from 'ngx-toastr';
+import { DataService } from './data.service';
 @Injectable()
 export class AuthService {
   baseUrl = 'http://localhost:8000/';
@@ -23,10 +25,10 @@ export class AuthService {
     email: '',
     phone: ''
   };
-  // authChange = new Observable( this.onAuthChange());
   isLoginSubject = new BehaviorSubject<boolean>(this.hasToken());
   currentUserSubject = new BehaviorSubject<string>(this.getUser());
   constructor(
+    private toastrService: ToastrService,
     private router: Router,
     private cookieService: CookieService,
     private http: HttpClient
@@ -45,16 +47,34 @@ export class AuthService {
     this.isLoginSubject.next(true);
     this.currentUserSubject.next(this.getUser());
   }
-  login(user: string, password: string): Observable<any> {
+  needLogin() {
+    this.deleteToken();
+    this.isLoginSubject.next(false);
+    this.router.navigate(['login']);
+  }
+  login(username: string, password: string): Observable<any> {
     const body = JSON.stringify({
-      username: user,
+      username: username,
       password: password
     });
-    // this.setToken('token');
-    return this.http.post(this.baseUrl + 'retro/user/login/', body, this.httpOptions);
+    this.http.post(this.baseUrl + 'api-token-auth/', body, this.httpOptions).subscribe(
+      (data: any) => {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', username);
+        this.toastrService.success('Succesfully loged in');
+        this.loginSuccess();
+        this.router.navigate(['/']);
+      },
+        (err: HttpErrorResponse) => {
+        if ( err.status !== 400 ) {
+          this.toastrService.error(err.message, 'error');
+        } else {
+          this.toastrService.error('inalid credentials');
+        }
+    });
   }
   logout() {
-    this.http.get(this.baseUrl + 'retro/user/logout');
+    this.http.get(this.baseUrl + 'logout');
     this.deleteToken();
     this.isLoginSubject.next(false);
   }
@@ -79,6 +99,7 @@ export class AuthService {
       this.router.navigate(['login']);
     }
   }
+
   hasToken() {
     return !!localStorage.getItem('token');
   }
@@ -92,7 +113,6 @@ export class AuthService {
 
   deleteToken() {
     localStorage.clear();
-    console.log('localStorage cleard');
   }
 
   setToken(token: string) {

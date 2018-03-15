@@ -1,21 +1,37 @@
 <div class="container">
   <div *ngIf="isReadyToLoad; else loading" >
-    <div class="row">
-      <div class="col-md-8 col-sm-10">
-          <h4>Board Name: {{board.board_name}}</h4>
-      </div>
-      <div class="col-md-4 col-sm-2">
-          <a class="btn btn-secondary btn-sm"><i class="fa fa-pencil"></i></a>
+    <br>
+    <div *ngIf="!isEditBoardName; else editName" class="row">
+      <div  class="col-md-8 col-sm-10">
+          <h4 class="d-inline" >Board Name: {{board.board_name}}</h4>
+          <a class="btn btn-outline-light btn-sm" 
+          data-toggle="tooltip" data-placement="top" title="edit"
+          (click)="editBoardNameClick()">
+            <i class="fa fa-pencil"></i>
+          </a>
       </div>
     </div>
+      <ng-template #editName>
+        <form>
+          <div class="row">
+            <div class="container">
+                <label for="boardname" ><h4>Board Name:</h4></label>
+                <input type="text" name="boardname" [(ngModel)]="boardNewName" class="">
+                <button [disabled]="boardNewName == boardName" (click)="onUpdateBoardName()" class="btn btn-success btn-float btn-sm"><i class="fa fa-check"></i></button>
+                <button (click)="isEditBoardName = !isEditBoardName" class="btn btn-danger btn-float btn-sm"><i class="fa fa-remove"></i></button>
+            </div>
+          </div>
+        </form>
+      </ng-template>
     <h5>Board Admin: {{ board.admin.first_name }} {{ board.admin.last_name }}</h5>
+    <br>
     <table class="table">
       <thead>
         <th>
           Board Members
         </th>
         <th>
-          <a [routerLink]="['/members/'+board.id]" class="btn btn-success btn-sm pull-right"><i class="fa fa-plus">Member</i></a>
+          <button [hidden]="!isBoardAdmin" (click)="isAddMembers = true" class="btn btn-outline-danger btn-sm pull-right"><i class="fa fa-plus"> Add Members</i></button>
         </th>
       </thead>
       <tbody>
@@ -30,10 +46,11 @@
               <a [routerLink]="['feedbacks/'+member.id]" class="btn btn-info btn-sm">
                 <i class="fa fa-comments-o"></i>
               </a>
-              <a class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Write Feedback">
-                <i class="fa fa-pencil-square-o"></i>
+              <a [hidden]="isBoardAdmin" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#writeFeedback"
+                (click)="setFeedbackTo(member)">
+                <i class="fa fa-pencil-square-o" data-toggle="tooltip" data-placement="top" title="Write Feedback" ></i>
               </a>
-              <a (click)="onDeleteClick(member.id)" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Remove">
+              <a [hidden]="!isBoardAdmin" (click)="onDeleteClick(member.id)" class="btn btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Remove">
                 <i class="fa fa-remove"></i>
               </a>
             </div>
@@ -41,7 +58,6 @@
         </tr>
         <tr>
           <td colspan="2">
-            <!-- <app-feedback></app-feedback> -->
           </td>
         </tr>
         </ng-container>
@@ -52,8 +68,9 @@
         </ng-template>
       </tbody>
     </table>
-    <app-feedback></app-feedback>
-    <app-write-feedback></app-write-feedback>
+    <app-feedback [toBoard]="board"></app-feedback>
+    <app-write-feedback [toBoard]="board" [feedbackTo]="feedbackTo" ></app-write-feedback>
+    <app-add-members *ngIf="isAddMembers" [toBoard]="board.id" (newMembers)="onNewMembers($event)"></app-add-members>        
   </div>
 </div>
 <ng-template #loading> Loading Board Details.........</ng-template>

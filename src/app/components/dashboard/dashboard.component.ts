@@ -12,10 +12,11 @@ import { User } from '../../models/user';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  boards: Board[];
-  users: User[];
-  isLoggedIn: Observable<boolean>;
-  loggedInUser: Observable<string>;
+  private boards: Board[];
+  private users: User[];
+  private isLoggedIn: Observable<boolean>;
+  private loggedInUser: Observable<string>;
+  private isStaff: boolean;
 
   constructor(
     private authservice: AuthService,
@@ -26,23 +27,15 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.isLoggedIn.subscribe( status => {
-    //   if (status) {
-    //     this.dataService.getUsers().subscribe( (users: User[]) => {
-    //       this.dataService.storeUsers(users);
-    //     });
-    //   }
-    // });
+
   }
   onGetBoardsClick() {
     this.dataService.getBoards().subscribe( (boards: Board[]) => {
-      console.log(boards);
       this.boards = boards;
     });
   }
   onGetUsersClick() {
     this.dataService.getUsers().subscribe( (users: User[]) => {
-      console.log(users);
       this.users = users;
     });
   }

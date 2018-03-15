@@ -20,7 +20,6 @@ export class FeedbacksComponent implements OnInit {
   private isReadyToLoad: boolean;
   private board: Board;
   private feedbacks: any[];
-  // private noFeedback
   constructor(
     private route: ActivatedRoute,
     private dataService: DataService,
@@ -32,8 +31,6 @@ export class FeedbacksComponent implements OnInit {
     this.isReadyToLoad = false;
     this.id = this.route.snapshot.params['id'];
     this.receiverId = this.route.snapshot.params['receiver'];
-    console.log('board id:', this.id);
-    console.log('receiver id:', this.receiverId);
     this.loadBoardData();
   }
 
@@ -45,16 +42,7 @@ export class FeedbacksComponent implements OnInit {
       this.dataService.getBoard(this.id).subscribe( (data: Board) => {
         this.board = data;
         this.board.admin = this.dataService.getUserDetailById(data.board_admin);
-        // this.receiver = this.dataService.getUserDetailById(this.receiverId);
         this.receiver = this.users.find( (user: User) => user.id == this.receiverId );
-        // console.log(this.users[0].id, this.receiverId, this.id);
-        // console.log(this.receiver);
-        // console.log(this.board);
-        // for (let i = 0; i < this.board.board_members.length; i++ ) {
-        //       this.board.board_members[i] = this.dataService.getUserDetailById(data.board_members[i]);
-        //       // console.log(this.board.board_members[i]);
-        //       this.readyToLoad = true;
-        // }
         this.loadFeedbacks(this.id);
       });
 
@@ -62,20 +50,17 @@ export class FeedbacksComponent implements OnInit {
   }
 
   loadFeedbacks(board_id: number) {
-    // console.log('loading feedbacks');
     this.dataService.getFeedbacks(board_id).subscribe( (data: Feedback[]) => {
       this.isReadyToLoad = true;
-      // console.log(data);
       this.feedbacks = data
       .filter( (feedback: Feedback) => {
-        // console.log(feedback);
-        return feedback.feedback_to === this.receiver;
+        return feedback.feedback_to === this.receiver.id;
       })
       .map( (feedback: Feedback) => {
-        return this.dataService.getUserDetailById(feedback.feedback_from);
+        feedback.from = this.dataService.getUserDetailById(feedback.feedback_from);
+        return feedback;
       }
       );
-      // console.log(this.feedbacks);
     });
 
   }

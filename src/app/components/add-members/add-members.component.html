@@ -1,21 +1,37 @@
-<div *ngIf="isReadyToLoad; else loading" class="container">
-  <div>
-      <h3>Select Members:</h3>
-  </div>
-  <div class="row">
-    <div class="col-md-6 offset-md-3">
-        <form *ngIf="users; else loading" class="list-grup list-unstyle">
-            <div *ngFor="let user of users" class="form-check">
-                <input (change)="onCheckClick(user,$event)" type="checkbox" class="form-check-input">
-                <label class="form-check-label" >{{user.first_name}} {{user.last_name}}</label>
+<button hidden id="#addMembersHiddenButton" data-toggle="modal" data-target="#addMembers"></button>
+  <div class="modal fade" id="addMembers" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add Members</h5>
+          <button (click)="onCloseClick()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <div *ngIf="isReadyToLoad" class="row">
+              <div class="col-md-6 offset-md-3">
+                  <form *ngIf="users?.length; else noUsers" class="list-grup list-unstyle">
+                      <div *ngFor="let user of users" class="form-check">
+                          <input (change)="onCheckClick(user,$event)" type="checkbox" class="form-check-input">
+                          <label class="form-check-label" >{{user.first_name}} {{user.last_name}}</label>
+                        </div>
+                  </form>
               </div>
-              <button class="btn btn-success btn-sm" (click)="onSubmitClick()">Update</button>
-        </form>
+            </div>
+            <ng-template #loading >
+                <h3>Loading Availabe user list.......</h3>
+            </ng-template>
+            <ng-template #noUsers>
+                <span>No more users available</span>
+            </ng-template>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal" (click)="onCloseClick()">cancel</button>
+          <button [disabled]="!users?.length || !members?.length" class="btn btn-success btn-sm" (click)="onSubmitClick()">Add</button>
+        </div>
+      </div>
     </div>
-  </div>
 </div>
-<ng-template #loading >
-  <h3>Loading Availabe user list.......</h3>
-</ng-template>
-      
-

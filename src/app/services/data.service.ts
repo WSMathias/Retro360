@@ -7,15 +7,16 @@ import { Board } from '../models/board';
 import { Feedback } from '../models/feedback';
 import { User } from '../models/user';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import 'rxjs/add/operator/catch';
 @Injectable()
 export class DataService {
   private users: User[];
-  private baseUrl = 'http://localhost:8000/';
+  private baseUrl = 'http://localhost:8000/retro/';
   private board: Board;
   private boards: Board[];
   private feedback: Feedback;
   private feedbacks: Feedback[];
-  userSubject: BehaviorSubject<any> = new BehaviorSubject('');
+  private userSubject: BehaviorSubject<any> = new BehaviorSubject('');
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
@@ -27,8 +28,14 @@ export class DataService {
     private router: Router
   ) { }
 
+  handelErrorOnResponse = (err: HttpErrorResponse) => {
+    console.log('error Handeled');
+    if (err.status === 401) {
+      this.authService.needLogin();
+    }
+    return err;
+  }
   register(user) {
-    console.log(user);
     const body = {
       username: user.username,
       first_name: user.firstname,
@@ -37,69 +44,78 @@ export class DataService {
       password: user.password,
       boards: []
     };
-    const url = this.baseUrl + 'retro/user/';
-    const response =  this.http.post(url, body, this.httpOptions);
-    return response;
+    const url = `${this.baseUrl}user/`;
+    return this.http.post(url, body, this.httpOptions);
   }
   getBoards() {
-    const url = this.baseUrl + 'retro/board/';
+    const url = `${this.baseUrl}board/`;
     const httpOptions = this.authService.getAuthOptions();
-    const response =  this.http.get(url, httpOptions);
-    return response;
+    return this.http.get(url, httpOptions);
   }
   getBoard(id: number) {
-    const url = this.baseUrl + 'retro/board/' + id + '/';
+    const url = `${this.baseUrl}board/${id}/`;
     const httpOptions = this.authService.getAuthOptions();
     const response =  this.http.get(url, httpOptions);
     return response;
   }
   updateBoard(id: number, board: Board) {
-    const url = this.baseUrl + 'retro/board/' + id + '/';
+    const url = `${this.baseUrl}board/${id}/`;
     const body = board;
     const httpOptions = this.authService.getAuthOptions();
-    const response =  this.http.put(url, body, httpOptions);
-    return response;
+    return this.http.put(url, body, httpOptions);
   }
   deleteBoard(id: number) {
-    const url = this.baseUrl + 'retro/board/' + id + '/';
+    const url = `${this.baseUrl}board/${id}/`;
     const httpOptions = this.authService.getAuthOptions();
-    const response =  this.http.get(url, httpOptions);
-    return response;
+    return this.http.delete(url, httpOptions);
   }
   getFeedbacks(id: number) {
-    const url = this.baseUrl + 'retro/board/' + id + '/feedbacks';
+    const url = `${this.baseUrl}board/${id}/feedbacks/`;
     const httpOptions = this.authService.getAuthOptions();
-    const response =  this.http.get(url, httpOptions);
-    return response;
+    return this.http.get(url, httpOptions);
   }
 
-  getUsers(): Observable<any> {
-    const url = this.baseUrl + 'retro/user/';
+  postFeedback(feedback: Feedback) {
+    const url = `${this.baseUrl}feedback/`;
+    const body = feedback;
     const httpOptions = this.authService.getAuthOptions();
-    const response =  this.http.get(url, httpOptions);
-    return response;
+    return this.http.post(url, body, httpOptions);
+  }
+
+  createBoard(board: Board) {
+    const url = `${this.baseUrl}board/`;
+    const body = board;
+    const httpOptions = this.authService.getAuthOptions();
+    return this.http.post(url, body, httpOptions);
+  }
+  getUsers(): Observable<any> {
+    const url = `${this.baseUrl}user/`;
+    const httpOptions = this.authService.getAuthOptions();
+    return this.http.get(url, httpOptions).map(
+      (res: User[]) => {
+        this.storeUsers(res);
+        return res;
+      },
+      this.handelErrorOnResponse
+    );
   }
   storeUsers(users: User[]) {
       this.users = users;
-      console.log('users saved');
   }
   getUserDetailById(id: number): User {
     if (!this.users) {
-      console.log('no users');
       return {};
     }
     return this.users.find( user => user.id === id);
   }
   getUserDetailByUserName(username: string): User {
     if (!this.users) {
-      console.log('no users');
       return {};
     }
     return this.users.find( user => user.username === username);
   }
   getUserDetailByEmail(email: string): User {
     if (!this.users) {
-      console.log('no users');
       return {};
     }
     return this.users.find( user => user.email === email );

@@ -30,11 +30,9 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit({value, valid}: {value: User, valid: boolean}) {
-    console.log(value, valid);
     if (!valid) {
       this.toastrService.error('Inavalid form data');
     } else {
-      console.log('registering user ...');
       this.dataService.register(value).subscribe( res => {
         this.toastrService.success('Registration success');
         this.router.navigate(['login']);

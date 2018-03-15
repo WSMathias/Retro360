@@ -1,14 +1,37 @@
 <div class="row">
-  <div *ngIf="boards; else loading" class="col-md-8">
-    <h2>Available Boards:</h2>
-      <ul class="list-group list-unstyled">
+  <div *ngIf="boards; else loading" class="container">
+    <div class="row">
+        <div class="col-6">
+            <h4>Available Boards:</h4>
+        </div>
+        <div class="col-6">
+            <a [hidden]="!loggedInUser.is_staff" class="btn btn-outline-danger btn-sm float-right" data-toggle="modal" data-target="#createBoard">
+                <i class="fa fa-plus"></i>
+                create board
+              </a>
+        </div>
+    </div>
+      <ul *ngIf="boards.length; else noBoards" class="list-group list-unstyled">
         <li *ngFor="let board of boards" class="list-group-item">
-          <i class="fa fa-group"></i>
-          {{ board.name }} owned by {{ board.admin.firstname }} {{ board.admin.lastname }}
-          <a  [routerLink]="['board/'+ board.id]" class="btn btn-primary btn-sm pull-right"><i class="fa fa-arrow-circle-right"></i></a>
+              <i class="fa fa-group"></i>
+              <h5 class="d-inline">{{ board.name }}</h5> owned by {{ board.admin.firstname }} {{ board.admin.lastname }}
+              <a  [hidden]="board.board_admin != loggedInUser.id" class="btn btn-danger btn-sm pull-right"
+                  (click)="onDeleteBoard(board)"
+                  data-toggle="tooltip" data-placement="top" title="Delete Board">
+                  <i class="fa fa-remove"></i></a>
+              <a  [routerLink]="['board/'+ board.id]"
+                  class="btn btn-primary btn-sm pull-right"
+                  data-toggle="tooltip" data-placement="top" title="Open Board">
+                  <i class="fa fa-arrow-circle-right"></i></a>
         </li>
       </ul>
+      <ng-template #noBoards>
+        <li class="list-group-item text-center">
+          No boards Available
+        </li>
+      </ng-template>
   </div>
+  <app-create-board (boardCreated)="newBoardAdded($event)"></app-create-board>
   <ng-template #loading>
     Loading boards .....
   </ng-template>

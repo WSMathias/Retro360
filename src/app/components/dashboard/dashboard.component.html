@@ -2,19 +2,7 @@
 <ng-template #dashboard>
     <div class="container">
         <app-boards></app-boards>
-        <!-- <h3>List Of Boards:</h3><button class="btn btn-primary" (click)="onGetBoardsClick()">Get List</button>
-        <a href="" routerLink="boards" class="btn btn-success">Boards</a>
-        <ul class="list-group">
-            <li *ngFor=" let board of boards;" class="list-group-item">
-                {{ board.board_name }} board admin
-            </li>
-        </ul> -->
-        <h3>List Of users:</h3><button class="btn btn-primary" (click)="onGetUsersClick()">Get List</button>
-        <ul class="list-group">
-            <li *ngFor=" let user of users;" class="list-group-item">
-                {{ user.first_name }} {{user.last_name}} 
-            </li>
-        </ul>
+        <app-users></app-users>
     </div>
 </ng-template>
 

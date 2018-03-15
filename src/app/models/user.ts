@@ -8,4 +8,5 @@ export interface User {
     id?: number;
     phone?: string;
     password?: string;
+    is_staff?: boolean;
 }
