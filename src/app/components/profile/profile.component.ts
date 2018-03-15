@@ -9,8 +9,8 @@ import { User } from '../../models/user';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-  user: any;
-  username: string;
+  private user: any;
+  private username: string;
   constructor(
     private dataService: DataService,
     private route: ActivatedRoute

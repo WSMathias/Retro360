@@ -45,7 +45,6 @@ export class AddMembersComponent implements OnInit, OnChanges {
     this.hasMembers = false;
     this.dataService.getUsers().subscribe( (users: User[]) => {
       this.dataService.storeUsers(users);
-      this.users = users;
       this.dataService.getBoard(this.id).subscribe( (data: Board) => {
         this.board = data;
         // TODO filter users already member of board

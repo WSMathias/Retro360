@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpRequest, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { CookieService} from 'ngx-cookie-service';
 import { User } from '../models/user';
 import { Router } from '@angular/router';
 import { Token } from '../models/token';
@@ -30,7 +29,6 @@ export class AuthService {
   constructor(
     private toastrService: ToastrService,
     private router: Router,
-    private cookieService: CookieService,
     private http: HttpClient
   ) { }
   checkAuthChange() {}
@@ -52,7 +50,7 @@ export class AuthService {
     this.isLoginSubject.next(false);
     this.router.navigate(['login']);
   }
-  login(username: string, password: string): Observable<any> {
+  login(username: string, password) {
     const body = JSON.stringify({
       username: username,
       password: password

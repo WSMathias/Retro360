@@ -11,8 +11,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  isPasswordConfirmed: boolean;
-  user: User = {
+  private isPasswordConfirmed: boolean;
+  private user: User = {
     firstname: '',
     lastname: '',
     email: '',

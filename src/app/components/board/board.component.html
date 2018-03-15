@@ -68,7 +68,6 @@
         </ng-template>
       </tbody>
     </table>
-    <app-feedback [toBoard]="board"></app-feedback>
     <app-write-feedback [toBoard]="board" [feedbackTo]="feedbackTo" ></app-write-feedback>
     <app-add-members *ngIf="isAddMembers" [toBoard]="board.id" (newMembers)="onNewMembers($event)"></app-add-members>        
   </div>
